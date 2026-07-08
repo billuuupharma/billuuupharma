@@ -16,7 +16,6 @@ quantity:100,
 image:"medicine.png"
 },
 
-
 {
 id:2,
 brand:"Crocin 650",
@@ -33,7 +32,6 @@ quantity:120,
 image:"medicine.png"
 },
 
-
 {
 id:3,
 brand:"Augmentin 625",
@@ -49,7 +47,6 @@ mrp:"235",
 quantity:40,
 image:"medicine.png"
 },
-
 
 {
 id:4,
