@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Wellness Medicare</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+<h1>🏥 Wellness Medicare</h1>
+
+<p>📍 Pathanpura, Deoband</p>
+
+</header>
+
+
+
+<div class="container">
+
+
+<input
+type="text"
+id="search"
+placeholder="Search Medicine..."
+onkeyup="searchMedicine()">
+
+
+
+<button onclick="toggleAdmin()">
+
+➕ Add Medicine
+
+</button>
+
+
+
+
+<div id="adminPanel" style="display:none;">
+
+
+<h2>Add Medicine</h2>
+
+
+<input id="brand" placeholder="Brand Name">
+
+<input id="salt" placeholder="Salt">
+
+<input id="company" placeholder="Company">
+
+<input id="mg" placeholder="MG">
+
+<input id="packing" placeholder="Packing">
+
+<input id="mfg" placeholder="MFG">
+
+<input id="expiry" placeholder="Expiry">
+
+<input id="mrp" placeholder="MRP">
+
+
+
+<button onclick="saveMedicine()">
+
+💾 Save Medicine
+
+</button>
+
+
+</div>
+
+
+
+
+
+<div id="medicineContainer"></div>
+
+
+
+
+
+
+<div id="popup" class="popup">
+
+
+<div class="popupBox">
+
+
+<span class="close" onclick="closePopup()">
+
+✖
+
+</span>
+
+
+
+<div id="popupContent"></div>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<button id="topBtn" onclick="goTop()">
+
+⬆
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+<footer class="footer">
+
+
+<h3>🏥 Wellness Medicare</h3>
+
+
+<p>Pathanpura, Deoband</p>
+
+
+<p>Fast • Reliable • Trusted</p>
+
+
+</footer>
+
+
+
+
+
+<script src="medicines.js"></script>
+
+<script src="script.js"></script>
+
+
+</body>
+
+</html>
