@@ -13,9 +13,7 @@
 
 </head>
 
-
 <body>
-
 
 <header class="header">
 
@@ -25,10 +23,7 @@
 
 </header>
 
-
-
 <div class="container">
-
 
 <input
 type="text"
@@ -36,22 +31,13 @@ id="search"
 placeholder="Search Medicine..."
 onkeyup="searchMedicine()">
 
-
-
-<button onclick="toggleAdmin()">
-
-➕ Add Medicine
-
+<button onclick="adminLogin()">
+🔐 Admin Panel
 </button>
-
-
-
 
 <div id="adminPanel" style="display:none;">
 
-
-<h2>Add Medicine</h2>
-
+<h2>Add / Edit Medicine</h2>
 
 <input id="brand" placeholder="Brand Name">
 
@@ -69,91 +55,53 @@ onkeyup="searchMedicine()">
 
 <input id="mrp" placeholder="MRP">
 
+<label><b>Medicine Photo</b></label>
 
+<input
+type="file"
+id="imageFile"
+accept="image/*">
 
 <button onclick="saveMedicine()">
-
 💾 Save Medicine
-
 </button>
 
-
 </div>
-
-
-
-
 
 <div id="medicineContainer"></div>
 
-
-
-
-
-
 <div id="popup" class="popup">
-
 
 <div class="popupBox">
 
-
 <span class="close" onclick="closePopup()">
-
 ✖
-
 </span>
-
-
 
 <div id="popupContent"></div>
 
-
-
 </div>
 
-
 </div>
-
-
-
-
 
 <button id="topBtn" onclick="goTop()">
-
 ⬆
-
 </button>
 
-
-
 </div>
-
-
-
-
 
 <footer class="footer">
 
-
 <h3>🏥 Wellness Medicare</h3>
-
 
 <p>Pathanpura, Deoband</p>
 
-
 <p>Fast • Reliable • Trusted</p>
-
 
 </footer>
 
-
-
-
-
 <script src="medicines.js"></script>
-
 <script src="script.js"></script>
-
 
 </body>
 
