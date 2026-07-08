@@ -339,3 +339,50 @@ width:100%;
 
 
 }
+/* ===== ADMIN PANEL ===== */
+
+#adminPanel h2{
+margin-bottom:15px;
+color:#0b5ed7;
+text-align:center;
+}
+
+#imageFile{
+padding:8px;
+background:#fff;
+border:1px solid #ccc;
+border-radius:8px;
+cursor:pointer;
+}
+
+#adminPanel label{
+display:block;
+margin-top:10px;
+margin-bottom:6px;
+font-weight:bold;
+color:#333;
+}
+
+/* ===== BUTTONS ===== */
+
+.editBtn,
+.deleteBtn{
+margin-top:10px;
+margin-right:8px;
+}
+
+/* ===== MOBILE ===== */
+
+@media(max-width:768px){
+
+.editBtn,
+.deleteBtn{
+width:100%;
+margin-right:0;
+}
+
+#imageFile{
+font-size:14px;
+}
+
+}
