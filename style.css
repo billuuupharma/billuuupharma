@@ -1,161 +1,65 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
+:root {
+    --primary: #0b5ed7;
+    --dark: #1e293b;
+    --green: #198754;
+    --bg: #f1f5f9;
 }
 
-body{
-    background:#f4f8fc;
-    color:#222;
-    padding-bottom: 80px; /* Space for bottom bar */
+* { margin:0; padding:0; box-sizing:border-box; font-family: 'Inter', sans-serif; }
+
+body { background: var(--bg); overflow-x: hidden; width: 100%; }
+
+/* Admin Portal */
+.admin-top-bar { background: var(--dark); padding: 10px; text-align: center; color: white; }
+.admin-btn-small { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 5px; cursor: pointer; }
+.admin-panel-box { background: white; color: #333; margin: 10px auto; padding: 20px; border-radius: 12px; max-width: 800px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+.admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+.admin-grid input { padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
+.admin-btns { display: flex; gap: 10px; margin-top:10px; }
+.save-btn { background: var(--green); color:white; padding: 10px; flex:2; border-radius:8px; border:none; }
+.logout-btn { background: #666; color:white; padding: 10px; flex:1; border-radius:8px; border:none; }
+
+/* Header */
+.header { background: linear-gradient(135deg, var(--primary), var(--green)); color: white; text-align: center; padding: 30px 15px; }
+.container { width: 95%; max-width: 1100px; margin: 20px auto; }
+.search-box input { width: 100%; padding: 15px; border: none; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); font-size: 16px; outline: none; }
+
+/* Medicine Cards */
+.medicine-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 25px; }
+.card { background: white; border-radius: 15px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: 0.3s; }
+.medicineImage { width: 100%; height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 12px; background: #eee; }
+.card h2 { color: var(--primary); font-size: 20px; margin-bottom: 8px; }
+.card p { font-size: 14px; margin-bottom: 4px; color: #444; }
+.order-btn { width: 100%; background: var(--green); color: white; padding: 12px; border: none; border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; }
+
+/* Modern Floating Cart Bar */
+.cart-bar-modern {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+    width: 95%; max-width: 500px; background: rgba(30, 41, 59, 0.95);
+    backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 12px 20px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    z-index: 9999; animation: slideUp 0.4s ease;
 }
+@keyframes slideUp { from { transform: translate(-50%, 100px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+.cart-content { display: flex; justify-content: space-between; align-items: center; }
+.cart-info-box { display: flex; align-items: center; gap: 15px; }
+.cart-icon-wrapper { position: relative; font-size: 24px; background: rgba(255, 255, 255, 0.1); width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 12px; }
+.badge-count { position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; font-size: 11px; font-weight: bold; padding: 2px 6px; border-radius: 10px; }
+.cart-text-details { display: flex; flex-direction: column; }
+#cartCount { color: white; font-weight: 600; font-size: 15px; }
+.cart-text-details small { color: #94a3b8; font-size: 12px; }
+.whatsapp-btn-new { background: #25D366; color: white; border: none; padding: 10px 18px; border-radius: 12px; font-weight: 700; display: flex; align-items: center; gap: 8px; cursor: pointer; }
 
-.header{
-    background:linear-gradient(135deg,#0b5ed7,#198754);
-    color:#fff;
-    text-align:center;
-    padding:25px 15px;
-    box-shadow:0 3px 10px rgba(0,0,0,.2);
-}
+/* Modal */
+.modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; }
+.modal-content { background: white; padding: 25px; border-radius: 15px; width: 90%; max-width: 350px; position: relative; text-align: center; }
+.qty-group { display: flex; gap: 15px; margin: 20px 0; }
+.qty-item { flex: 1; }
+.qty-item input { width: 100%; padding: 8px; text-align: center; border: 1px solid #ddd; border-radius: 5px; }
+.confirm-btn { width: 100%; background: var(--primary); color: white; padding: 12px; border: none; border-radius: 8px; font-weight: bold; }
+.close { position: absolute; right: 15px; top: 10px; font-size: 24px; cursor: pointer; }
 
-.header h1{ font-size:32px; margin-bottom:8px; }
-.header p{ font-size:17px; opacity:.95; }
+.footer { background: var(--primary); color: white; padding: 40px 15px; text-align: center; margin-top: 40px; }
+#topBtn { position: fixed; right: 20px; bottom: 100px; width: 45px; height: 45px; border-radius: 50%; background: var(--primary); color: white; border: none; display: none; }
 
-.container{
-    width:95%;
-    max-width:1200px;
-    margin:20px auto;
-}
-
-input{
-    width:100%;
-    padding:12px;
-    margin:8px 0;
-    border:1px solid #ccc;
-    border-radius:8px;
-    font-size:15px;
-    background:#fff;
-}
-
-button{
-    background:#0b5ed7;
-    color:#fff;
-    border:none;
-    padding:12px 18px;
-    border-radius:8px;
-    font-size:15px;
-    font-weight:bold;
-    cursor:pointer;
-    margin-top:10px;
-    transition:.3s;
-}
-
-button:hover{ background:#084298; }
-
-#adminPanel{
-    background:#fff;
-    padding:20px;
-    margin-top:20px;
-    border-radius:12px;
-    box-shadow:0 2px 10px rgba(0,0,0,.12);
-}
-
-.card{
-    background:#fff;
-    border-radius:14px;
-    padding:16px;
-    margin:18px 0;
-    box-shadow:0 4px 12px rgba(0,0,0,.12);
-    transition:.3s;
-}
-
-.medicineImage{
-    width:100%;
-    height:180px;
-    object-fit:cover;
-    border-radius:10px;
-    margin-bottom:12px;
-    background:#f1f1f1;
-}
-
-.card h2{ color:#0b5ed7; margin-bottom:10px; font-size:22px; }
-.card p{ margin:6px 0; font-size:15px; }
-
-.editBtn{ background:#198754; }
-.deleteBtn{ background:#dc3545; }
-
-/* Popup Styling */
-.popup{
-    display:none;
-    position:fixed;
-    left:0; top:0;
-    width:100%; height:100%;
-    background:rgba(0,0,0,.55);
-    z-index:1000;
-}
-
-.popupBox{
-    background:#fff;
-    width:90%;
-    max-width:400px;
-    margin:100px auto;
-    padding:20px;
-    border-radius:12px;
-    position:relative;
-    text-align: center;
-}
-
-.qty-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 15px 0;
-}
-.qty-row input { width: 80px; text-align: center; }
-
-.close{
-    position:absolute;
-    right:15px; top:10px;
-    font-size:22px; cursor:pointer;
-}
-
-/* Bottom Cart Bar */
-.cart-bar {
-    position: fixed;
-    bottom: 0; left: 0;
-    width: 100%;
-    background: #198754;
-    color: white;
-    padding: 15px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
-    z-index: 999;
-}
-
-.place-order-btn {
-    background: #fff;
-    color: #198754;
-    margin-top: 0;
-}
-
-.place-order-btn:hover { background: #e9e9e9; color: #198754; }
-
-.footer{ margin-top:40px; padding:25px; text-align:center; background:#0b5ed7; color:#fff; }
-
-#topBtn{
-    position:fixed;
-    right:20px; bottom:80px;
-    display:none;
-    border-radius:50%;
-    width:50px; height:50px;
-    z-index: 100;
-}
-
-@media(max-width:768px){
-    .header h1{ font-size:26px; }
-    button{ width:100%; }
-    .cart-bar { flex-direction: column; gap: 10px; text-align: center; }
-}
+@media (max-width: 600px) { .admin-grid { grid-template-columns: 1fr; } .cart-bar-modern { width: 92%; } }
