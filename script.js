@@ -126,7 +126,7 @@ function updateCartUI(){
 
 function sendWhatsApp(){
     if(cart.length === 0) return;
-    let message = "🏥 *Wellness Medicare - Order Request*\n\n";
+    let message = "🏥 *Wellness Medicare - Order*\n\n";
     cart.forEach((item, index) => {
         message += `${index + 1}. *${item.name}*\n`;
         if(item.strips > 0) message += `   - Strips: ${item.strips}\n`;
