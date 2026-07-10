@@ -12,7 +12,10 @@ body { background: var(--bg); overflow-x: hidden; }
 .sidebar a { padding: 15px 25px; text-decoration: none; font-size: 16px; color: var(--dark); display: block; font-weight: 500; }
 .overlay { position: fixed; display: none; width: 100%; height: 100%; top: 0; left: 0; background-color: rgba(0,0,0,0.5); z-index: 9999; }
 
-/* BETTER SEARCH BAR DESIGN */
+/* Container */
+.container { padding: 15px; }
+
+/* SEARCH BAR */
 .search-container { 
     position: relative; 
     width: 100%; 
@@ -42,6 +45,30 @@ body { background: var(--bg); overflow-x: hidden; }
     color: var(--dark);
 }
 
+/* NEW: Horizontal Scroll Style */
+.section-title { 
+    font-size: 18px; 
+    font-weight: 800; 
+    margin-bottom: 12px; 
+    color: var(--dark); 
+    letter-spacing: -0.5px;
+}
+.horizontal-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    padding-bottom: 10px;
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* Hide for Firefox */
+}
+.horizontal-scroll::-webkit-scrollbar { display: none; } /* Hide for Chrome */
+
+.horizontal-scroll .card {
+    min-width: 165px;
+    max-width: 165px;
+    flex-shrink: 0;
+}
+
 /* Grid & Cards */
 .medicine-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding-bottom: 120px; }
 .card { background: white; border-radius: 18px; padding: 12px; text-align: center; border: 1px solid #f1f1f1; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
@@ -61,7 +88,7 @@ body { background: var(--bg); overflow-x: hidden; }
 .stepper input { width: 45px; border: none; background: transparent; text-align: center; font-weight: 800; font-size: 16px; outline: none; }
 .confirm-btn-premium { width: 100%; background: var(--primary); color: white; padding: 15px; border: none; border-radius: 15px; font-weight: bold; font-size: 15px; }
 
-/* Detail Page Fixes */
+/* Detail Page */
 .detail-page { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 5000; overflow-y: auto; display: none; }
 .top-nav { padding: 15px; background: white; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #f1f5f9; }
 .modern-back-btn { background: var(--dark); color: white; border: none; padding: 10px 20px; border-radius: 50px; font-weight: 700; }
@@ -69,8 +96,12 @@ body { background: var(--bg); overflow-x: hidden; }
 .detail-info-card { padding: 20px; background: #fff; border-radius: 30px 30px 0 0; margin-top: -20px; box-shadow: 0 -10px 30px rgba(0,0,0,0.05); padding-bottom: 150px; }
 .medicine-title-box { background: linear-gradient(135deg, #e0f2fe, #dcfce7); padding: 15px; border-radius: 20px; margin-bottom: 20px; text-align: center; }
 .info-row { display: flex; justify-content: space-between; padding: 14px 10px; border-bottom: 1px dotted #e2e8f0; font-size: 14px; }
+
+/* Cart Bar */
 .cart-bar-modern { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 92%; background: #1e293b; color: white; padding: 15px 22px; border-radius: 22px; display: flex; z-index: 9999; justify-content: space-between; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
 .whatsapp-btn-new { background: #25D366; color: white; padding: 10px 20px; border: none; border-radius: 12px; font-weight: 800; }
+
+/* Admin */
 .admin-panel-box { background: white; padding: 20px; border-radius: 15px; margin: 10px auto; width: 92%; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
 .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .admin-grid input { padding: 10px; border: 1px solid #ddd; border-radius: 8px; width: 100%; }
