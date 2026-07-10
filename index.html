@@ -41,10 +41,9 @@
             <input id="expiry" placeholder="Expiry">
             <input id="mrp" placeholder="MRP (₹)">
         </div>
-        <!-- Recent Category Option -->
         <div style="margin-top: 10px; display: flex; align-items: center; gap: 10px; background: #f1f5f9; padding: 10px; border-radius: 8px; grid-column: span 2;">
             <input type="checkbox" id="isRecent" style="width: 18px; height: 18px;">
-            <label for="isRecent" style="font-weight: 600; font-size: 13px; color: #1e293b;">Show in Recently Added (Horizontal Scroll)</label>
+            <label for="isRecent" style="font-weight: 600; font-size: 13px; color: #1e293b;">Show in Recently Added</label>
         </div>
         <input type="file" id="imageFile" accept="image/*" style="margin-top:10px;">
         <button onclick="saveMedicine()" class="save-btn">💾 Save Medicine</button>
@@ -57,13 +56,15 @@
             <input type="text" id="search" placeholder="Search medicines or salt..." onkeyup="searchMedicine()">
         </div>
 
-        <!-- NEW: Recently Added Category Section -->
-        <div id="recentSection" style="display:none; margin-bottom: 20px;">
-            <h2 class="section-title">✨ Recently Added</h2>
+        <div id="recentSection" style="display:none; margin-bottom: 25px;">
+            <h2 class="section-title recent-theme">✨ Recently Added</h2>
             <div id="recentMedicineContainer" class="horizontal-scroll"></div>
         </div>
 
-        <div id="medicineContainer" class="medicine-grid"></div>
+        <div id="allMedsSection">
+            <h2 class="section-title all-meds-theme">📦 Medicine Collection</h2>
+            <div id="medicineContainer" class="medicine-grid"></div>
+        </div>
     </div>
 </div>
 
@@ -71,7 +72,7 @@
     <div class="top-nav">
         <button class="modern-back-btn" onclick="hideDetails()">⬅ Back</button>
     </div>
-    <div id="detailContent"></div>
+    <div id="detailContent" class="detail-fixed-body"></div>
 </div>
 
 <div id="qtyPopup" class="modal" style="display:none;">
