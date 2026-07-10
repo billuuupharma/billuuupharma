@@ -4,19 +4,11 @@ let cart = [];
 let editId = null;
 let isAdmin = false;
 let selectedImage = "";
+let lastScrollPos = 0; // Scroll position ko store karne ke liye
 
 function openSidebar() { document.getElementById("mySidebar").style.width = "280px"; document.getElementById("sidebarOverlay").style.display = "block"; }
 function closeSidebar() { document.getElementById("mySidebar").style.width = "0"; document.getElementById("sidebarOverlay").style.display = "none"; }
 function showAbout() { alert("🏥 Wellness Medicare\n📍 Pathanpura, Deoband\n\nYour trusted pharmacy partner."); }
-
-let touchstartX = 0;
-let touchstartY = 0;
-document.getElementById('detailView').addEventListener('touchstart', e => { touchstartX = e.changedTouches[0].screenX; touchstartY = e.changedTouches[0].screenY; }, {passive: true});
-document.getElementById('detailView').addEventListener('touchend', e => {
-    let xDiff = e.changedTouches[0].screenX - touchstartX;
-    let yDiff = Math.abs(e.changedTouches[0].screenY - touchstartY);
-    if (xDiff > 90 && yDiff < 50) hideDetails();
-}, {passive: true});
 
 window.onload = () => {
     db.collection("medicines").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
@@ -30,16 +22,16 @@ window.onload = () => {
     });
 };
 
-// Common Card Creator Function
-function createCardHTML(m) {
+function createCardHTML(m, category) {
     let isInCart = cart.find(item => item.id === m.id);
+    let fillClass = category === 'recent' ? 'recent-fill' : 'collection-fill';
     return `
-        <div class="card">
+        <div class="card ${fillClass}">
             <img src="${m.image || 'medicine.png'}" class="medicineImage" onclick="viewDetails('${m.id}')">
             <h2 onclick="viewDetails('${m.id}')">${m.brand}</h2>
             <button class="btn-details" onclick="viewDetails('${m.id}')">👁 View Details</button>
             ${isInCart ? `<button class="btn-cart-small" style="background:#dc3545;" onclick="removeFromCart('${m.id}')">✖ Unselect</button>` : `<button class="btn-cart-small" onclick="openQtyPopup('${m.id}')">🛒 Add to Cart</button>`}
-            ${isAdmin ? `<div style="display:flex; gap:4px; margin-top:5px;"><button onclick="editMedicine('${m.id}')" style="flex:1; padding:6px; background:#f1f5f9; border:none; border-radius:6px;">✏️</button><button onclick="deleteMedicine('${m.id}')" style="flex:1; padding:6px; background:#fef2f2; color:red; border:none; border-radius:6px;">🗑️</button></div>` : ""}
+            ${isAdmin ? `<div style="display:flex; gap:4px; margin-top:5px;"><button onclick="editMedicine('${m.id}')" style="flex:1; padding:6px; background:#fff; border:1px solid #ddd; border-radius:6px;">✏️</button><button onclick="deleteMedicine('${m.id}')" style="flex:1; padding:6px; background:#fff; color:red; border:1px solid #fecaca; border-radius:6px;">🗑️</button></div>` : ""}
         </div>`;
 }
 
@@ -47,52 +39,84 @@ function renderMedicines(list) {
     let container = document.getElementById("medicineContainer");
     let recentContainer = document.getElementById("recentMedicineContainer");
     let recentSection = document.getElementById("recentSection");
-    
     if(!container) return;
+    
     container.innerHTML = "";
     recentContainer.innerHTML = "";
-
-    let isSearching = document.getElementById("search").value.length > 0;
-
-    // Filter Recent vs Normal
+    
+    let searchInput = document.getElementById("search").value.toLowerCase();
+    
+    // Filtering logic
     let recentList = list.filter(m => m.isRecent === true);
     let normalList = list.filter(m => m.isRecent !== true);
-
-    // Show Horizontal Section if not searching
-    if(recentList.length > 0 && !isSearching) {
+    
+    if(recentList.length > 0 && searchInput === "") {
         recentSection.style.display = "block";
-        recentList.forEach(m => {
-            recentContainer.innerHTML += createCardHTML(m);
-        });
+        recentList.forEach(m => { recentContainer.innerHTML += createCardHTML(m, 'recent'); });
     } else {
         recentSection.style.display = "none";
     }
 
-    // Grid View (Show all if searching, else show only normal)
-    let displayList = isSearching ? list : normalList;
-    displayList.forEach(m => {
-        container.innerHTML += createCardHTML(m);
-    });
+    let displayList = searchInput !== "" ? list.filter(m => m.brand.toLowerCase().includes(searchInput) || m.salt.toLowerCase().includes(searchInput)) : normalList;
+    displayList.forEach(m => { container.innerHTML += createCardHTML(m, 'collection'); });
 }
 
 function viewDetails(id) {
     let m = medicineData.find(x => x.id === id);
     if(!m) return;
+    
+    // AGAR MAIN VIEW DHIK RAHA HAI TABHI SCROLL POSITION SAVE KARO
+    if(document.getElementById("mainView").style.display !== "none") {
+        lastScrollPos = window.scrollY;
+    }
+    
     let isInCart = cart.find(item => item.id === m.id);
-    document.getElementById("detailContent").innerHTML = `<img src="${m.image || 'medicine.png'}" class="detail-img"><div class="detail-info-card"><div class="medicine-title-box"><h1>${m.brand}</h1><p style="color:#0369a1; font-size:12px;"><b>Salt:</b> ${m.salt}</p></div><div class="info-row"><b>Dosage</b> <span>${m.mg}</span></div><div class="info-row"><b>Company</b> <span>${m.company}</span></div><div class="info-row"><b>Packing</b> <span>${m.packing}</span></div><div class="info-row" style="background:#f0fdf4;"><b>MRP</b> <span style="color:#15803d; font-size:16px;">₹${m.mrp}</span></div><div class="info-row"><b>MFG Date</b> <span>${m.mfg}</span></div><div class="info-row"><b>Expiry Date</b> <span>${m.expiry}</span></div>${isInCart ? `<button class="confirm-btn-premium" style="margin-top:25px; background:#dc3545;" onclick="removeFromCart('${m.id}', true)">✖ Remove / Unselect</button>` : `<button class="confirm-btn-premium" style="margin-top:25px;" onclick="openQtyPopup('${m.id}', true)">🛒 Add to Cart Now</button>`}</div>`;
+    document.getElementById("detailContent").innerHTML = `
+        <img src="${m.image || 'medicine.png'}" class="detail-img">
+        <div class="detail-info-card">
+            <div class="medicine-title-box">
+                <h1>${m.brand}</h1>
+            </div>
+            <div class="info-row"><b>Salt</b> <span style="color:#0369a1; font-weight:600; text-align:right;">${m.salt}</span></div>
+            <div class="info-row"><b>Composition</b> <span>${m.mg}</span></div>
+            <div class="info-row"><b>Company</b> <span>${m.company}</span></div>
+            <div class="info-row"><b>Packing</b> <span>${m.packing}</span></div>
+            <div class="info-row" style="background:#f0fdf4; border-radius:8px;"><b>MRP Price</b> <span style="color:#15803d; font-weight:700;">₹${m.mrp}</span></div>
+            <div class="info-row"><b>MFG Date</b> <span>${m.mfg}</span></div>
+            <div class="info-row"><b>Expiry Date</b> <span>${m.expiry}</span></div>
+            ${isInCart ? `<button class="confirm-btn-premium" style="background:#dc3545;" onclick="removeFromCart('${m.id}', true)">✖ Remove Item</button>` : `<button class="confirm-btn-premium" onclick="openQtyPopup('${m.id}', true)">🛒 Add to Cart Now</button>`}
+        </div>`;
+    
     document.getElementById("mainView").style.display = "none";
-    document.getElementById("detailView").style.display = "block";
+    document.getElementById("detailView").style.display = "flex";
     window.scrollTo(0,0);
 }
 
-function hideDetails() { document.getElementById("detailView").style.display = "none"; document.getElementById("mainView").style.display = "block"; }
-function removeFromCart(id, refreshDetail = false){ cart = cart.filter(item => item.id !== id); updateCartUI(); renderMedicines(medicineData); if(refreshDetail) viewDetails(id); }
-function changeQty(id, val) { let input = document.getElementById(id); let newVal = (parseInt(input.value) || 0) + val; if (newVal >= 0) input.value = newVal; }
+function hideDetails() { 
+    document.getElementById("detailView").style.display = "none"; 
+    document.getElementById("mainView").style.display = "block"; 
+    // WAHI WAPAS PAUNCH JAO JAHAN PEHLE THE
+    window.scrollTo(0, lastScrollPos); 
+}
+
+function removeFromCart(id, refreshDetail = false){ 
+    cart = cart.filter(item => item.id !== id); 
+    updateCartUI(); 
+    renderMedicines(medicineData); 
+    if(refreshDetail) viewDetails(id); 
+}
+
+function changeQty(id, val) { 
+    let input = document.getElementById(id); 
+    let newVal = (parseInt(input.value) || 0) + val; 
+    if (newVal >= 0) input.value = newVal; 
+}
 
 function openQtyPopup(id, refreshDetail = false){
     let m = medicineData.find(x => x.id === id);
     document.getElementById("popTitle").innerText = m.brand;
-    document.getElementById("stripQty").value = 0; document.getElementById("boxQty").value = 0;
+    document.getElementById("stripQty").value = 0; 
+    document.getElementById("boxQty").value = 0;
     document.getElementById("qtyPopup").style.display = "flex";
     document.getElementById("confirmAddBtn").onclick = function(){
         let s = parseInt(document.getElementById("stripQty").value) || 0;
@@ -103,23 +127,51 @@ function openQtyPopup(id, refreshDetail = false){
 }
 
 function closeQtyPopup(){ document.getElementById("qtyPopup").style.display = "none"; }
-function addToCart(id, s, b, refreshDetail = false){ let m = medicineData.find(x => x.id === id); cart.push({ id, name: m.brand, strips: s, boxes: b }); updateCartUI(); renderMedicines(medicineData); if(refreshDetail) viewDetails(id); }
+
+function addToCart(id, s, b, refreshDetail = false){ 
+    let m = medicineData.find(x => x.id === id); 
+    cart.push({ id, name: m.brand, strips: s, boxes: b }); 
+    updateCartUI(); 
+    renderMedicines(medicineData); 
+    if(refreshDetail) viewDetails(id); 
+}
+
 function updateCartUI(){
     let bar = document.getElementById("bottomCartBar");
-    if(cart.length > 0){ bar.style.display = "flex"; document.getElementById("cartCount").innerText = cart.length + " Items Selected"; }
-    else { bar.style.display = "none"; }
+    let countText = document.getElementById("cartCount");
+    if(cart.length > 0){ 
+        bar.style.display = "flex"; 
+        countText.innerText = cart.length + " Items Selected"; 
+    } else { 
+        bar.style.display = "none"; 
+    }
 }
 
 function sendWhatsApp(){
     let msg = "🏥 *Wellness Medicare Order Request*\n\n";
-    cart.forEach((item, i) => { msg += `${i+1}. *${item.name}*\n`; if(item.strips > 0) msg += `   - Strips: ${item.strips}\n`; if(item.boxes > 0) msg += `   - Boxes: ${item.boxes}\n`; msg += `\n`; });
+    cart.forEach((item, i) => { 
+        msg += `${i+1}. *${item.name}*\n`; 
+        if(item.strips > 0) msg += `   - Strips: ${item.strips}\n`; 
+        if(item.boxes > 0) msg += `   - Boxes: ${item.boxes}\n`; 
+        msg += `\n`; 
+    });
     window.location.href = "https://wa.me/916396832385?text=" + encodeURIComponent(msg);
-    cart = []; updateCartUI(); renderMedicines(medicineData);
+    cart = []; 
+    updateCartUI(); 
+    renderMedicines(medicineData);
 }
 
-function searchMedicine(){ let val = document.getElementById("search").value.toLowerCase(); let res = medicineData.filter(m => m.brand.toLowerCase().includes(val) || m.salt.toLowerCase().includes(val)); renderMedicines(res); }
+function searchMedicine(){ 
+    renderMedicines(medicineData); 
+}
 
-function adminLogin(){ if(prompt("Admin Password") === ADMIN_PASSWORD){ isAdmin = true; document.getElementById("adminPanel").style.display = "block"; renderMedicines(medicineData); } }
+function adminLogin(){ 
+    if(prompt("Admin Password") === ADMIN_PASSWORD){ 
+        isAdmin = true; 
+        document.getElementById("adminPanel").style.display = "block"; 
+        renderMedicines(medicineData); 
+    } 
+}
 
 async function saveMedicine() {
     const med = { 
@@ -132,12 +184,13 @@ async function saveMedicine() {
         expiry: document.getElementById("expiry").value, 
         mrp: document.getElementById("mrp").value, 
         image: selectedImage || "medicine.png", 
-        isRecent: document.getElementById("isRecent").checked,
+        isRecent: document.getElementById("isRecent").checked, 
         createdAt: new Date() 
     };
     if(editId === null) await db.collection("medicines").add(med);
     else await db.collection("medicines").doc(editId).update(med);
-    alert("Saved Successfully!"); clearForm();
+    alert("Saved Successfully!"); 
+    clearForm();
 }
 
 function editMedicine(id){ 
@@ -145,11 +198,11 @@ function editMedicine(id){
     editId = id; 
     document.getElementById("brand").value = m.brand; 
     document.getElementById("salt").value = m.salt; 
-    document.getElementById("company").value = m.company;
+    document.getElementById("company").value = m.company; 
     document.getElementById("mg").value = m.mg;
-    document.getElementById("packing").value = m.packing;
+    document.getElementById("packing").value = m.packing; 
     document.getElementById("mfg").value = m.mfg;
-    document.getElementById("expiry").value = m.expiry;
+    document.getElementById("expiry").value = m.expiry; 
     document.getElementById("mrp").value = m.mrp; 
     document.getElementById("isRecent").checked = m.isRecent || false;
     selectedImage = m.image; 
@@ -160,8 +213,12 @@ function deleteMedicine(id){ if(confirm("Delete Permanently?")) db.collection("m
 
 function clearForm(){ 
     document.querySelectorAll("#adminPanel input[type='text'], #adminPanel input[type='number']").forEach(i => i.value=""); 
-    document.getElementById("isRecent").checked = false;
+    document.getElementById("isRecent").checked = false; 
     editId = null; 
 }
 
-function logoutAdmin(){ isAdmin = false; document.getElementById("adminPanel").style.display = "none"; renderMedicines(medicineData); }
+function logoutAdmin(){ 
+    isAdmin = false; 
+    document.getElementById("adminPanel").style.display = "none"; 
+    renderMedicines(medicineData); 
+}
