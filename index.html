@@ -9,11 +9,26 @@
 </head>
 <body>
 
-<div class="admin-top-bar">
-    <button class="admin-btn-small" onclick="adminLogin()">🔐 Admin Login</button>
+<div id="sidebarOverlay" class="overlay" onclick="closeSidebar()"></div>
+<div id="mySidebar" class="sidebar">
+    <div class="sidebar-header">
+        <h3>Menu</h3>
+        <span class="close-sidebar" onclick="closeSidebar()">&times;</span>
+    </div>
+    <a href="#" onclick="adminLogin(); closeSidebar();">🔐 Admin Panel</a>
+    <a href="#" onclick="showAbout(); closeSidebar();">ℹ️ About Us</a>
+    <a href="#" onclick="closeSidebar()">🏠 Home</a>
 </div>
 
 <div id="mainView">
+    <header class="header">
+        <span class="menu-icon" onclick="openSidebar()">&#9776;</span>
+        <div class="header-text">
+            <h1>🏥 Wellness Medicare</h1>
+            <p>Pathanpura, Deoband</p>
+        </div>
+    </header>
+
     <div id="adminPanel" class="admin-panel-box" style="display:none;">
         <h3>🛠 Cloud Management</h3>
         <div class="admin-grid">
@@ -27,20 +42,14 @@
             <input id="mrp" placeholder="MRP (₹)">
         </div>
         <input type="file" id="imageFile" accept="image/*" style="margin-top:10px;">
-        <div class="admin-btns">
-            <button onclick="saveMedicine()" class="save-btn">💾 Save</button>
-            <button onclick="logoutAdmin()" class="logout-btn">Logout</button>
-        </div>
+        <button onclick="saveMedicine()" class="save-btn">💾 Save Medicine</button>
+        <button onclick="logoutAdmin()" style="width:100%; margin-top:5px; background:#666; color:white; border:none; padding:10px; border-radius:8px;">Logout</button>
     </div>
 
-    <header class="header">
-        <h1>🏥 Wellness Medicare</h1>
-        <p>Pathanpura, Deoband</p>
-    </header>
-
     <div class="container">
-        <div class="search-box">
-            <input type="text" id="search" placeholder="Search medicines..." onkeyup="searchMedicine()">
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search" placeholder="Search medicines or salt..." onkeyup="searchMedicine()">
         </div>
         <div id="medicineContainer" class="medicine-grid"></div>
     </div>
@@ -55,7 +64,7 @@
 
 <div id="qtyPopup" class="modal" style="display:none;">
     <div class="modal-content-modern">
-        <span class="close-icon" onclick="closeQtyPopup()">&times;</span>
+        <span class="close-icon-highlighted" onclick="closeQtyPopup()">&times;</span>
         <h3 id="popTitle">Quantity</h3>
         <p style="font-size:12px; color:#666; margin-bottom:15px;">Adjust strips and boxes</p>
         <div class="qty-control-row">
@@ -80,7 +89,7 @@
 
 <div id="bottomCartBar" class="cart-bar-modern" style="display: none;">
     <div class="cart-content">
-        <span>🛒 <b id="cartCount">0 Items</b></span>
+        <span>🛒 <b id="cartCount">0 Items Selected</b></span>
         <button class="whatsapp-btn-new" onclick="sendWhatsApp()">Order Now</button>
     </div>
 </div>
