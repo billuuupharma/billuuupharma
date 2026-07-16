@@ -55,7 +55,7 @@ function createCardHTML(m, type) {
     let isInCart = cart.find(item => item.id === m.id);
     let fillClass = type === 'recent' ? 'recent-fill' : (type === 'ethical' ? 'ethical-fill' : 'collection-fill');
     let adminButtons = isAdmin ? `<div style="display:flex; gap:5px; margin-top:8px;"><button onclick="editMedicine('${m.id}')" style="flex:1; padding:5px; background:#fff; border:1px solid #ddd; border-radius:5px;">✏️</button><button onclick="deleteMedicine('${m.id}')" style="flex:1; padding:6px; background:#fff; color:red; border:1px solid #ddd; border-radius:5px;">🗑️</button></div>` : "";
-    return `<div class="card ${fillClass}"><img src="${m.image || 'medicine.png'}" class="medicineImage" onclick="viewDetails('${m.id}')"><h2 onclick="viewDetails('${m.id}')">${m.brand}</h2><button class="btn-details" onclick="viewDetails('${m.id}')">👁 View Details</button>${isInCart ? `<button class="btn-cart-small" style="background:#dc3545;" onclick="removeFromCart('${m.id}')">✖ Remove</button>` : `<button class="btn-cart-small" onclick="openQtyPopup('${m.id}')">🛒 Add to Cart</button>`}${adminButtons}</div>`;
+    return `<div class="card ${fillClass}"><img src="${m.image || 'medicine.png'}" class="medicineImage" onclick="viewDetails('${m.id}')"><h2 onclick="viewDetails('${m.id}')">${m.brand}</h2><button class="btn-details" onclick="viewDetails('${m.id}')">View Details</button>${isInCart ? `<button class="btn-cart-small" style="background:#dc3545;" onclick="removeFromCart('${m.id}')">Remove</button>` : `<button class="btn-cart-small" onclick="openQtyPopup('${m.id}')">Add to Cart</button>`}${adminButtons}</div>`;
 }
 
 function renderMedicines(list) {
@@ -68,12 +68,12 @@ function renderMedicines(list) {
     
     if(currentView === 'ethical') {
         recentSection.style.display = "none";
-        document.getElementById("collectionTitle").innerText = "💊 Ethical Medicines";
+        document.getElementById("collectionTitle").innerText = "Ethical Medicines";
         container.className = "medicine-list-view";
         let filtered = list.filter(m => m.isEthical === true);
         filtered.forEach(m => { container.innerHTML += createCardHTML(m, 'ethical'); });
     } else {
-        document.getElementById("collectionTitle").innerText = "📦 Medicine Collection";
+        document.getElementById("collectionTitle").innerText = "Medicine Collection";
         container.className = "medicine-grid";
         let recentList = list.filter(m => m.isRecent === true);
         let collectionList = list.filter(m => m.isCollection === true || (m.isEthical !== true && m.isRecent !== true));
@@ -93,14 +93,19 @@ function viewDetails(id) {
     document.getElementById("detailContent").innerHTML = `
         <img src="${m.image || 'medicine.png'}" class="detail-img">
         <div class="detail-info-card">
-            <div style="background:linear-gradient(135deg,#e0f2fe,#dcfce7); padding:10px; border-radius:12px; margin-bottom:12px; text-align:center;"><h1>${m.brand}</h1></div>
-            <div class="info-row"><b>Salt</b> <span>${m.salt || 'N/A'}</span></div>
-            <div class="info-row"><b>Company</b> <span>${m.company || 'N/A'}</span></div>
-            <div class="info-row"><b>Composition</b> <span>${m.mg || 'N/A'}</span></div>
-            <div class="info-row"><b>Packing</b> <span>${m.packing || 'N/A'}</span></div>
-            <div class="info-row" style="background:#f0fdf4; border-radius:8px; padding:6px;"><b>MRP Price</b> <span style="color:#15803d; font-weight:700;">₹${m.mrp || '0'}</span></div>
-            <div class="info-row"><b>Expiry</b> <span>${m.expiry || 'N/A'}</span></div>
-            ${isInCart ? `<button class="confirm-btn-premium" style="background:#dc3545;" onclick="removeFromCart('${m.id}', true)">✖ Remove Item</button>` : `<button class="confirm-btn-premium" onclick="openQtyPopup('${m.id}', true)">🛒 Add to Cart Now</button>`}
+            <div class="detail-name-box">
+                <h1>${m.brand}</h1>
+            </div>
+            <div class="info-row"><b>Salt</b><span>${m.salt || 'N/A'}</span></div>
+            <div class="info-row"><b>Company</b><span>${m.company || 'N/A'}</span></div>
+            <div class="info-row"><b>Composition</b><span>${m.mg || 'N/A'}</span></div>
+            <div class="info-row"><b>Packing</b><span>${m.packing || 'N/A'}</span></div>
+            <div class="info-row mrp-row"><b>MRP Price</b><span>₹${m.mrp || '0'}</span></div>
+            <div class="info-row"><b>Expiry</b><span>${m.expiry || 'N/A'}</span></div>
+            ${isInCart
+                ? `<button class="confirm-btn-premium" style="background:#dc3545;" onclick="removeFromCart('${m.id}', true)">✖ Remove Item</button>`
+                : `<button class="confirm-btn-premium" onclick="openQtyPopup('${m.id}', true)">🛒 Add to Cart Now</button>`
+            }
         </div>`;
     document.getElementById("mainView").style.display = "none";
     document.getElementById("detailView").style.display = "flex";
