@@ -102,18 +102,30 @@ function viewDetails(id) {
             <div class="info-row"><b>Packing</b><span>${m.packing || 'N/A'}</span></div>
             <div class="info-row mrp-row"><b>MRP Price</b><span>₹${m.mrp || '0'}</span></div>
             <div class="info-row"><b>Expiry</b><span>${m.expiry || 'N/A'}</span></div>
+        </div>
+        <div class="detail-btn-area">
             ${isInCart
                 ? `<button class="confirm-btn-premium" style="background:#dc3545;" onclick="removeFromCart('${m.id}', true)">✖ Remove Item</button>`
                 : `<button class="confirm-btn-premium" onclick="openQtyPopup('${m.id}', true)">🛒 Add to Cart Now</button>`
             }
         </div>`;
     document.getElementById("mainView").style.display = "none";
+    document.getElementById("bottomCartBar").style.display = "none";
     document.getElementById("detailView").style.display = "flex";
+    let detailOrderBar = document.getElementById("detailOrderBar");
+    let detailCartCount = document.getElementById("detailCartCount");
+    if (isInCart) {
+        detailOrderBar.style.display = "block";
+        detailCartCount.innerText = cart.length + " Items Selected";
+    } else {
+        detailOrderBar.style.display = "none";
+    }
 }
 
 function hideDetails() { 
     document.getElementById("detailView").style.display = "none"; 
     document.getElementById("mainView").style.display = "block"; 
+    updateCartUI();
     setTimeout(() => { window.scrollTo(0, lastScrollPos); }, 1);
 }
 
