@@ -13,12 +13,10 @@
 <div id="mySidebar" class="sidebar">
     <div class="sidebar-header">
         <h3>Menu</h3>
-        <span class="close-sidebar" onclick="closeSidebar()">&times;</span>
+        <button class="close-sidebar-btn" onclick="closeSidebar()">&#x2715;</button>
     </div>
     <div class="sidebar-links">
         <a href="#" onclick="adminLogin(); closeSidebar();">🔐 Admin Panel</a>
-        <a href="#" onclick="showAbout(); closeSidebar();">ℹ️ About Us</a>
-        <a href="#" onclick="closeSidebar()">🏠 Home</a>
     </div>
 </div>
 
@@ -34,7 +32,6 @@
         </div>
     </header>
 
-    <!-- Admin Panel -->
     <div id="adminPanel" class="admin-panel-box" style="display:none;">
         <h3>Manage Store</h3>
         <div class="admin-grid">
@@ -61,7 +58,6 @@
             <div id="imagePreviewRow" style="display:flex; gap:6px; flex-wrap:wrap; margin-top:6px;"></div>
         </div>
         <button onclick="saveMedicine()" class="save-btn">💾 Save Medicine</button>
-        
         <div class="admin-cat-section">
             <h4>Categories</h4>
             <div style="display: flex; gap: 8px; margin-top:5px;">
@@ -73,7 +69,6 @@
         <button onclick="logoutAdmin()" class="logout-btn">Logout</button>
     </div>
 
-    <!-- Global Search Bar -->
     <div class="global-search-wrap">
         <div class="search-container">
             <span class="search-icon">🔍</span>
@@ -81,7 +76,6 @@
         </div>
     </div>
 
-    <!-- Home View Content -->
     <div id="homeContent">
         <div class="container">
             <div id="recentSection" style="display:none; margin-bottom: 25px;">
@@ -95,7 +89,6 @@
         </div>
     </div>
 
-    <!-- Category View -->
     <div id="categoryContent" style="display:none;">
         <div class="flipkart-cat-layout">
             <div id="catSidebar" class="cat-sidebar"></div>
