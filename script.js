@@ -212,7 +212,12 @@ function updateCartUI() {
 
 function sendWhatsApp() {
     let msg = "🏥 *Billuuu pharma Order*\n\n";
-    cart.forEach((item, i) => { msg += `${i+1}. *${item.name}* (Strips: ${item.strips}, Boxes: ${item.boxes})\n`; });
+    cart.forEach((item) => {
+        msg += `*${item.name}*\n`;
+        if (item.strips > 0) msg += `Strips: ${item.strips}\n`;
+        if (item.boxes > 0) msg += `Boxes: ${item.boxes}\n`;
+        msg += "\n";
+    });
     window.location.href = "https://wa.me/916396832385?text=" + encodeURIComponent(msg);
     cart = []; updateCartUI(); renderMedicines(medicineData);
 }
